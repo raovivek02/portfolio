@@ -6,124 +6,79 @@
 <title>Vivek Yadav | 3D Vision &amp; LiDAR Perception</title>
 <meta name="theme-color" content="#0f172a">
 <style>
-:root{--bg:#05080f;--surface:rgba(9,15,28,.78);--text:#e6f1ff;--muted:#8ba3bd;--line:rgba(34,211,238,.18);--accent:#22d3ee;--accent2:#4ade80;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f8fafc;--surface:#fff;--text:#0f172a;--muted:#475569;--line:#e2e8f0;--accent:#0284c7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f172a;--surface:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--line:#334155;--accent:#38bdf8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f172a;--surface:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--line:#334155;--accent:#38bdf8;color-scheme:dark}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:70px;background:var(--bg)}
-body{margin:0;background:transparent;color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;counter-reset:s}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:var(--accent);text-decoration:none}
-#lidar{position:fixed;inset:0;z-index:-1;width:100%;height:100%}
-.scan{position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
-.scan::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.55))}
-nav{position:sticky;top:env(safe-area-inset-top,0px);background:rgba(5,8,15,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:40}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
 nav div{max-width:980px;margin:auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:8px 18px;flex-wrap:wrap}
-nav b{font-family:ui-monospace,Menlo,monospace;letter-spacing:.08em;color:var(--accent)}
-nav b::before{content:"\25C9 ";color:var(--accent2)}
 nav span{display:flex;gap:16px;flex-wrap:wrap}
-nav span a{color:var(--muted);font:13px ui-monospace,Menlo,monospace}
-nav span a:hover{color:var(--accent);text-shadow:0 0 10px var(--accent)}
+nav span a{color:var(--muted);font-size:14px}
+nav span a:hover{color:var(--accent)}
 main{max-width:980px;margin:auto;padding:0 20px}
-section{padding:64px 0 4px}
-h1{font-size:clamp(2.1rem,5.6vw,3.5rem);line-height:1.1;margin:0 0 14px;letter-spacing:-.02em}
-h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-h2{font-size:1.45rem;margin:0 0 24px;font-family:ui-monospace,Menlo,monospace;letter-spacing:.02em}
-h2::before{counter-increment:s;content:counter(s,decimal-leading-zero) " //";color:var(--accent);margin-right:12px;font-size:.9rem}
-.hero{padding-top:70px}
-.hud,.tag{font:12px ui-monospace,Menlo,monospace;color:var(--accent2);letter-spacing:.08em;margin:0 0 8px;text-transform:uppercase}
-.role{font:600 1.05rem ui-monospace,Menlo,monospace;color:var(--accent);min-height:1.7em;margin:0 0 6px}
-.cur{display:inline-block;width:9px;height:1.05em;background:var(--accent);margin-left:3px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
-.lead{color:var(--muted);max-width:700px;font-size:1.04rem}
+section{padding:60px 0 4px}
+h1{font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.1;margin:0 0 12px}
+h1 em{font-style:normal;color:var(--accent)}
+h2{font-size:1.5rem;margin:0 0 22px}
+h2::before{content:"";display:inline-block;width:28px;height:3px;background:var(--accent);margin-right:12px;vertical-align:middle}
+.hero{padding-top:80px}
+.tag{color:var(--accent);font-family:ui-monospace,Menlo,monospace;font-size:14px;margin:0 0 6px}
+.lead{color:var(--muted);max-width:700px;font-size:1.05rem}
 .btns{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
-.btn{padding:10px 20px;border-radius:6px;border:1px solid var(--accent);font:600 14px ui-monospace,Menlo,monospace;transition:box-shadow .2s,transform .2s}
-.btn:hover{box-shadow:0 0 22px rgba(34,211,238,.5);transform:translateY(-2px)}
-.btn.p{background:var(--accent);color:#031018}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:36px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;backdrop-filter:blur(6px)}
-.stat b{display:block;font:700 1.5rem ui-monospace,Menlo,monospace;color:var(--accent);text-shadow:0 0 14px rgba(34,211,238,.5)}
+.btn{padding:10px 20px;border-radius:8px;border:1px solid var(--accent);font-weight:600}
+.btn.p{background:var(--accent);color:var(--bg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:34px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat b{display:block;font-size:1.5rem;color:var(--accent)}
 .stat span{color:var(--muted);font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .25s,box-shadow .25s}
-.card:hover{border-color:rgba(34,211,238,.55);box-shadow:0 0 28px rgba(34,211,238,.12)}
-.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--accent)}
-.card::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
-.card::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
 .card h3{margin:0 0 4px;font-size:1.08rem}
-.meta{color:var(--muted);font:12px ui-monospace,Menlo,monospace;margin:0 0 10px}
+.meta{color:var(--muted);font-size:13px;margin:0 0 10px}
 .card p{margin:8px 0;color:var(--muted);font-size:.95rem}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
-.chips span{font:11px ui-monospace,Menlo,monospace;padding:2px 10px;border-radius:3px;border:1px solid var(--line);color:var(--accent2);background:rgba(74,222,128,.06)}
+.chips span{font-size:12px;padding:2px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
 .big{margin-bottom:16px}
 .big .cs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
-.cs div{border-left:2px solid var(--accent);padding-left:12px}
-.cs h4{margin:0 0 2px;font:11px ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+.cs div{border-left:3px solid var(--accent);padding-left:12px}
+.cs h4{margin:0 0 2px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
 .cs p{margin:0}
 details{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
-summary{cursor:pointer;color:var(--accent);font:600 13px ui-monospace,Menlo,monospace}
+summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600}
 ul{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:.95rem}
 li{margin:5px 0}
-.tl{border-left:1px solid var(--accent);padding-left:22px;margin-left:6px}
+.tl{border-left:2px solid var(--line);padding-left:20px;margin-left:6px}
 .tl .item{position:relative;margin-bottom:24px}
-.tl .item::before{content:"";position:absolute;left:-29px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 12px var(--accent)}
+.tl .item::before{content:"";position:absolute;left:-27px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
 .tl h3{margin:0;font-size:1.05rem}
-.status{font:700 11px ui-monospace,Menlo,monospace;color:var(--accent2);letter-spacing:.08em}
+.status{font-size:12px;font-weight:600;color:var(--accent)}
 .skills div{margin-bottom:10px}
-.skills b{font:600 .85rem ui-monospace,Menlo,monospace;color:var(--text)}
-footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font:12px ui-monospace,Menlo,monospace}
+.skills b{font-size:.9rem}
 .herorow{display:flex;gap:40px;align-items:center;justify-content:space-between;flex-wrap:wrap-reverse}
 .herotext{flex:1 1 420px}
-.me{width:240px;height:240px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);margin:0 auto;animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(34,211,238,.08),0 0 50px rgba(34,211,238,.45)}0%,100%{box-shadow:0 0 0 6px rgba(34,211,238,.1),0 0 24px rgba(34,211,238,.25)}}
-figure{position:relative;margin:18px 0 0}
-figure img,figure video{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--line);background:#000}
-figure:has(video)::before{content:"\25CF REC";position:absolute;top:10px;left:12px;z-index:2;font:700 11px ui-monospace,Menlo,monospace;color:#f87171;background:rgba(0,0,0,.65);padding:2px 8px;border-radius:3px}
+.me{width:240px;height:240px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);box-shadow:0 0 0 8px var(--surface);margin:0 auto}
+figure{margin:18px 0 0}
+figure img,figure video{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:#000}
 figcaption{color:var(--muted);font-size:13px;margin-top:8px}
 .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:18px}
 .pair figure{margin:0}
 .pair img{background:#fff}
 .js .fade{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .js .fade.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.js .fade{opacity:1;transform:none;transition:none}.me,.cur{animation:none}}
-main{max-width:none;padding:0}
-section{--accent:rgb(var(--ac));--line:rgba(var(--ac),.22);position:relative;overflow:hidden;padding:90px max(20px,calc((100% - 940px)/2)) 80px;border-top:1px solid rgba(var(--ac),.3);background:radial-gradient(ellipse at 12% 0%,rgba(var(--ac),.13),transparent 55%),radial-gradient(ellipse at 95% 100%,rgba(var(--ac),.07),transparent 50%)}
-section::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);z-index:2}
-section>*:not(.bg){position:relative;z-index:1}
-.bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-h2{font-size:clamp(1.9rem,4.6vw,2.9rem);letter-spacing:-.02em;margin:0 0 30px;line-height:1.1}
-h2::before{display:block;margin:0 0 8px}
-h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--accent);letter-spacing:.08em;opacity:.85;margin-top:10px;text-transform:uppercase}
-#research h2::after{content:"\25B8 scene-flow vectors \00B7 motion prediction"}
-#recon h2::after{content:"\25B8 points converging into a 3D shape"}
-#projects h2::after{content:"\25B8 live detection \00B7 tier 1 + tier 2"}
-#cardiac h2::after{content:"\25B8 ecg trace \00B7 volumetric slices"}
-#more h2::after{content:"\25B8 reward curves \00B7 agents on a limit order book"}
-#building h2::after{content:"\25B8 tool calls flowing through an agent graph"}
-#skills h2::after{content:"\25B8 tensor stream"}
-#contact h2::after{content:"\25B8 ping"}
-.btn{color:var(--accent);border-color:var(--accent)}
-.btn.p{background:var(--accent);color:#05080f}
-.chips span{color:var(--accent);background:rgba(var(--ac),.07);border-color:rgba(var(--ac),.28)}
-.cs{counter-reset:c}.cs div{counter-increment:c;border-left-color:var(--accent)}
-.cs div::before{content:"0" counter(c);display:block;font:700 2rem ui-monospace,Menlo,monospace;color:rgba(var(--ac),.45);line-height:1}
-.tl .item h3{font-size:1.3rem}
-#about{display:grid;grid-template-columns:1fr 1fr;gap:0 44px;align-items:start;background:linear-gradient(rgba(var(--ac),.06) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(var(--ac),.06) 1px,transparent 1px) 0 0/40px 40px}
-#about h2{grid-column:1/-1}
-#about .lead:first-of-type{font-size:1.25rem;color:var(--text)}
-#contact{text-align:center}
-#contact .lead{margin-inline:auto}
-#contact .btns{justify-content:center}
-@media (max-width:760px){#about{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.js .fade{opacity:1;transform:none;transition:none}}
+footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
-<div class="scan" aria-hidden="true"></div>
 <nav><div><b>Vivek Yadav</b><span><a href="#about">About</a><a href="#education">Education</a><a href="#research">Research</a><a href="#projects">Projects</a><a href="#building">Building</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></span></div></nav>
 <main>
 
-<section id="hero" class="hero" data-scene="lidar" style="--ac:34,211,238"><canvas class="bg"></canvas><div class="herorow"><div class="herotext">
-  <p class="hud" id="hud">FRAME 000231</p>
+<section class="hero"><div class="herorow"><div class="herotext">
   <p class="tag">M.Tech · Cyber Physical Systems · IIT Jodhpur</p>
   <h1>Turning research papers into <em>working 3D perception</em> systems.</h1>
-  <p class="role"><span id="typed"></span><i class="cur"></i></p>
   <p class="lead">I work on deep learning, computer vision and LiDAR perception for autonomous driving, from motion prediction on point clouds to detection, segmentation and 3D reconstruction.</p>
   <div class="btns"><a class="btn p" href="#research">Thesis research</a><a class="btn" href="#projects">Projects</a><a class="btn" href="#contact">Contact</a></div>
   </div><img class="me" src="photo.jpg" alt="Vivek Yadav" width="240" height="240"></div>
@@ -135,13 +90,13 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
   </div>
 </section>
 
-<section id="about" style="--ac:34,211,238">
+<section id="about">
   <h2>About</h2>
   <p class="lead">I’m an M.Tech researcher at IIT Jodhpur with hands-on experience in deep learning, computer vision and 3D/LiDAR perception, spanning object detection, segmentation, point-cloud processing and motion prediction.</p>
   <p class="lead">I’m skilled at turning research papers into working PyTorch code, training models at scale on GPUs and HPC clusters, and containerizing pipelines with Docker. I have a strong foundation in data structures, algorithms and software design (Python, C/C++), and I like learning emerging technologies by building with them.</p>
 </section>
 
-<section id="education" style="--ac:148,163,184">
+<section id="education">
   <h2>Education</h2>
   <div class="tl">
     <div class="item"><h3>M.Tech, Cyber Physical Systems</h3><p class="meta">Indian Institute of Technology (IIT) Jodhpur · Expected 2027</p><p class="lead">Coursework: Deep Learning, Machine Learning, Computer Vision, Control Systems, Cyber Security.</p></div>
@@ -150,7 +105,7 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
   </div>
 </section>
 
-<section id="research" data-scene="flow" style="--ac:56,189,248"><canvas class="bg"></canvas>
+<section id="research">
   <h2>Research</h2>
 
   <div class="card big">
@@ -171,10 +126,7 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
     <figure><video src="lidar-motion.mp4" poster="lidar-motion-poster.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption>MotionNet baseline reproduction on nuScenes: LiDAR input with boxes (left), ground truth (middle) and model prediction (right).</figcaption></figure>
   </div>
 
-  </section>
-<section id="recon" data-scene="cloud3d" style="--ac:167,139,250"><canvas class="bg"></canvas>
-<h2>3D reconstruction</h2>
-<div class="card big">
+  <div class="card big">
     <h3>A Point Set Generation Network for 3D Object Reconstruction</h3>
     <p class="meta">Nov 2025 · 3D Vision · Point Clouds · PyTorch · <a href="https://github.com/raovivek02/A-point-set-generation-network-from-3D-object-reconstruction-from-single-image">GitHub</a></p>
     <ul>
@@ -186,8 +138,8 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
   </div>
 </section>
 
-<section id="projects" data-scene="detect" style="--ac:251,146,60"><canvas class="bg"></canvas>
-  <h2>Safety vision</h2>
+<section id="projects">
+  <h2>Projects</h2>
 
   <div class="card big">
     <h3>CognitiveGuard: Industrial Safety VLM System</h3>
@@ -201,10 +153,7 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
     <div class="btns"><a class="btn p" href="https://drive.google.com/file/d/1f1nuJNdbzHjuHDBhHX5FKjvzUJJNzhWC/view?usp=sharing" target="_blank" rel="noopener">Watch the full demo</a></div>
   </div>
 
-  </section>
-<section id="cardiac" data-scene="ecg" style="--ac:244,63,94"><canvas class="bg"></canvas>
-<h2>Medical imaging</h2>
-<div class="card big">
+  <div class="card big">
     <h3>3D Cardiac MRI Volumetric Segmentation Pipeline</h3>
     <p class="meta">2026 · 3D U-Net · Medical Imaging · PyTorch · HPC · <a href="https://github.com/raovivek02/3d-cardiac-segmentation">GitHub</a></p>
     <div class="cs">
@@ -215,17 +164,14 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
     <figure><video src="cardiac-3d.mp4" poster="cardiac-3d-poster.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption>3D rendering of the segmentation output, rotating through different views.</figcaption></figure>
   </div>
 
-  </section>
-<section id="more" data-scene="chart" style="--ac:74,222,128"><canvas class="bg"></canvas>
-<h2>RL &amp; robustness</h2>
-<div class="grid">
+  <div class="grid">
     <div class="card"><h3>CNN Robustness &amp; Bias Mitigation</h3><p class="meta">Feb 2026 · CIFAR-10 · Grad-CAM · <a href="https://github.com/raovivek02/DL-Assignment1-StressTesting">GitHub</a></p><p>Stress-tested CNN classifiers with failure-mode analysis, using Grad-CAM attention maps to uncover background biases affecting predictions, then applied targeted data augmentation to improve generalization.</p></div>
     <div class="card"><h3>MARL for Optimal Trade Execution</h3><p class="meta"><span class="status">ONGOING</span> · Quantitative finance · RL · HPC</p><p>Developing a high-frequency trading simulator with Multi-Agent Reinforcement Learning (JaxMARL-HFT) to optimize trade execution on Limit Order Book data, with training pipelines spread across local hardware and HPC clusters.</p></div>
     <div class="card"><h3>Reinforcement Learning: PPO Objective Analysis</h3><p class="meta">Apr 2026 · PyTorch · OpenAI Gym · <a href="#">Colab</a> · <a href="#">Report</a></p><p>Implemented and compared Clipped vs. Unclipped PPO objectives on CartPole-v1 to analyse policy stability and reward convergence.</p></div>
   </div>
 </section>
 
-<section id="building" data-scene="net" style="--ac:232,121,249"><canvas class="bg"></canvas>
+<section id="building">
   <h2>Currently building: LLM &amp; agentic systems</h2>
   <div class="grid">
     <div class="card"><h3>MCP Server for LLM Tool Integration</h3><p class="meta">2026 · Python · Model Context Protocol</p><p>A Model Context Protocol server that exposes tools to LLM agents with typed input schemas and error handling, so agents can call them in a standard way.</p></div>
@@ -234,14 +180,14 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
   </div>
 </section>
 
-<section id="experience" style="--ac:94,234,212">
+<section id="experience">
   <h2>Experience</h2>
   <div class="tl">
     <div class="item"><h3>Teaching Assistant, 3D Vision Summer School (3DVSS)</h3><p class="meta">BITS Pilani, Goa Campus · May 2026</p><p class="lead">Supported participants during hands-on sessions and cleared doubts on 3D vision and deep learning concepts.</p></div>
   </div>
 </section>
 
-<section id="skills" data-scene="matrix" style="--ac:163,230,53"><canvas class="bg"></canvas>
+<section id="skills">
   <h2>Skills</h2>
   <div class="card skills">
     <div><b>Computer vision &amp; 3D perception</b><div class="chips"><span>Object detection (YOLOv8)</span><span>Image segmentation</span><span>LiDAR &amp; point clouds</span><span>Motion / scene-flow prediction</span><span>3D reconstruction</span><span>Grad-CAM</span><span>Vision-language models</span><span>NIfTI / ITK-SNAP</span></div></div>
@@ -252,107 +198,21 @@ h2::after{display:block;font:400 12px ui-monospace,Menlo,monospace;color:var(--a
   </div>
 </section>
 
-<section id="contact" data-scene="radar" style="--ac:34,211,238"><canvas class="bg"></canvas>
+<section id="contact">
   <h2>Contact</h2>
   <p class="lead">Open to research discussions, collaborations and opportunities in 3D vision and autonomous driving perception.</p>
   <div class="btns"><a class="btn p" href="mailto:vivekyadav02072002@gmail.com">Email</a><a class="btn" href="https://github.com/raovivek02" target="_blank" rel="noopener">GitHub</a><a class="btn" href="https://www.linkedin.com/in/vivek-yadav-719885371/" target="_blank" rel="noopener">LinkedIn</a></div>
 </section>
 </main>
-<footer>© 2026 Vivek Yadav · IIT Jodhpur // end of sequence</footer>
+<footer>© 2026 Vivek Yadav · IIT Jodhpur</footer>
 <script>
 (function(){
-var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches,S={},R=Math.random;
-S.lidar=function(x,w,h,t,s,C){
- if(!s.p){s.cx=w>800?w*.7:w*.5;s.cy=h*.5;s.R=Math.hypot(w,h);s.p=[];var st=w>800?28:22;
-  for(var r=st;r<s.R;r+=st)for(var i=0,n=r*(w>800?.3:.18);i<n;i++){var a=R()*6.283;s.p.push([a,s.cx+r*Math.cos(a),s.cy+r*Math.sin(a)])}
-  s.o=[['car','74,222,128',-.9,.32,34,18],['bus','232,121,249',.5,.4,56,22],['ped','251,191,36',-2.2,.2,10,10],['bike','34,211,238',1.5,.18,18,10]].map(function(o,k){var d=o[3]*Math.min(w,h)*1.6+60;return{n:o[0],c:o[1],x:s.cx+d*Math.cos(o[2]),y:s.cy+d*Math.sin(o[2]),w:o[4],h:o[5],k:k}})}
- var ang=(t*.0009)%6.283,i,d;
- x.fillStyle=C(.2);for(i=0;i<s.p.length;i++)x.fillRect(s.p[i][1],s.p[i][2],1.3,1.3);
- x.fillStyle=C(1);
- for(i=0;i<s.p.length;i++){d=(ang-s.p[i][0])%6.283;if(d<0)d+=6.283;if(d<1.7){x.globalAlpha=.85*(1-d/1.7);x.fillRect(s.p[i][1],s.p[i][2],1.8,1.8)}}
- x.globalAlpha=1;x.strokeStyle=C(.6);x.beginPath();x.moveTo(s.cx,s.cy);x.lineTo(s.cx+s.R*Math.cos(ang),s.cy+s.R*Math.sin(ang));x.stroke();
- x.font='10px ui-monospace,monospace';
- s.o.forEach(function(o){var px=o.x+Math.sin(t*.0003+o.k)*40,py=o.y+Math.cos(t*.00025+o.k)*30,a=Math.atan2(py-s.cy,px-s.cx);if(a<0)a+=6.283;d=(ang-a)%6.283;if(d<0)d+=6.283;
-  var al=.45+.55*(d<1.7?1-d/1.7:0);x.strokeStyle=x.fillStyle='rgba('+o.c+','+al+')';x.lineWidth=1.5;x.strokeRect(px-o.w/2,py-o.h/2,o.w,o.h);x.fillText(o.n+' 0.9'+(o.k+1),px-o.w/2,py-o.h/2-6)})};
-S.flow=function(x,w,h,t,s,C){
- if(!s.p){s.p=[];for(var i=0;i<(w>800?150:70);i++)s.p.push([R()*w,R()*h])}
- x.lineWidth=1.4;
- s.p.forEach(function(p){var a=Math.sin(p[0]*.006+t*.0004)+Math.cos(p[1]*.007-t*.0003),vx=Math.cos(a*2)*14,vy=Math.sin(a*2)*14;
-  p[0]+=vx*.05;p[1]+=vy*.05;if(p[0]<0||p[0]>w||p[1]<0||p[1]>h){p[0]=R()*w;p[1]=R()*h}
-  x.strokeStyle=C(.5);x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(p[0]+vx,p[1]+vy);x.stroke();
-  x.fillStyle=C(.9);x.fillRect(p[0]+vx-1.5,p[1]+vy-1.5,3,3)})};
-S.cloud3d=function(x,w,h,t,s,C){
- function u(){return R()*2-1}
- if(!s.p){s.p=[];for(var i=0;i<700;i++){var k=R(),q;
-  if(k<.4)q=[u(),0,u()];else if(k<.7)q=[u(),R()*1.6,-1];else{q=[(R()<.5?-.9:.9)+u()*.08,-R()*1.1,(R()<.5?-.9:.9)+u()*.08]}
-  s.p.push(q.concat([u()*3,u()*3,u()*3]))}}
- var cx=w>800?w*.76:w*.5,cy=h*.5,sc=Math.min(w,h)*.22,k2=Math.max(0,1-((t%9000)/9000)*3.2),a=t*.0005,ca=Math.cos(a),sa=Math.sin(a);
- s.p.forEach(function(p){var X=p[0]+p[3]*k2,Y=p[1]+p[4]*k2-.3,Z=p[2]+p[5]*k2,rx=X*ca-Z*sa,rz=X*sa+Z*ca,f=3.5/(3.5+rz);
-  x.fillStyle=C(.35+.5*f*f);x.fillRect(cx+rx*sc*f,cy-Y*sc*f,2.2*f,2.2*f)})};
-S.detect=function(x,w,h,t,s,C){
- var L=[['helmet','250,204,21'],['vest','251,146,60'],['person','74,222,128']];
- if(!s.b){s.b=[];for(var i=0;i<6;i++)s.b.push({t0:0,d:4000+R()*2000})}
- x.font='11px ui-monospace,monospace';x.lineWidth=2;
- s.b.forEach(function(b){var u=(t-b.t0)/b.d;if(u>1||!b.x){b.t0=t-R()*b.d*.6;b.x=R()*(w-160);b.y=R()*(h-120);b.w=60+R()*90;b.h=50+R()*70;b.l=L[(R()*3)|0];b.c=(.78+R()*.2).toFixed(2);u=(t-b.t0)/b.d}
-  var al=Math.sin(Math.min(u,1)*Math.PI),X=b.x+u*20,k=10;x.strokeStyle='rgba('+b.l[1]+','+(.15+.75*al)+')';
-  x.beginPath();[[X,b.y,1,1],[X+b.w,b.y,-1,1],[X,b.y+b.h,1,-1],[X+b.w,b.y+b.h,-1,-1]].forEach(function(c){x.moveTo(c[0]+c[2]*k,c[1]);x.lineTo(c[0],c[1]);x.lineTo(c[0],c[1]+c[3]*k)});x.stroke();
-  x.fillStyle='rgba('+b.l[1]+','+(.2+.7*al)+')';x.fillText(b.l[0]+' '+b.c,X,b.y-6)});
- x.fillStyle=C(.5);x.fillRect(0,(t*.12)%h,w,1)};
-S.ecg=function(x,w,h,t,s,C){
- var i;x.lineWidth=1;x.strokeStyle=C(.07);x.beginPath();for(i=0;i<w;i+=20){x.moveTo(i,0);x.lineTo(i,h)}for(i=0;i<h;i+=20){x.moveTo(0,i);x.lineTo(w,i)}x.stroke();
- x.strokeStyle=C(.13);x.beginPath();for(i=0;i<w;i+=100){x.moveTo(i,0);x.lineTo(i,h)}for(i=0;i<h;i+=100){x.moveTo(0,i);x.lineTo(w,i)}x.stroke();
- function g(u,c,sg,a){return a*Math.exp(-Math.pow((u-c)/sg,2))}
- [.3,.58,.85].forEach(function(f,k){x.strokeStyle=C(.55-.12*k);x.lineWidth=2;x.shadowColor=C(1);x.shadowBlur=8;x.beginPath();
-  for(var X=0;X<=w;X+=3){var u=((X+t*.18*(1+k*.15))%360)/360,y=h*f-(g(u,.2,.05,10)-g(u,.42,.01,14)+g(u,.45,.012,70)-g(u,.49,.012,20)+g(u,.72,.07,18));X?x.lineTo(X,y):x.moveTo(X,y)}x.stroke()});x.shadowBlur=0};
-S.chart=function(x,w,h,t,s,C){
- if(!s.l){s.n=0;s.l=[0,1,2].map(function(k){var a=[],v=h*(.4+k*.12);for(var i=0;i<160;i++){v+=(R()-.5)*14;a.push(v)}return a})}
- if(++s.n%4==0)s.l.forEach(function(a){a.push(a[a.length-1]+(R()-.5)*14);a.shift()});
- x.lineWidth=1.8;var cl=['74,222,128','34,211,238','251,191,36'];
- s.l.forEach(function(a,k){x.strokeStyle='rgba('+cl[k]+',.6)';x.beginPath();a.forEach(function(v,i){var X=i*w/159,Y=Math.min(h-20,Math.max(20,v));i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke()});
- x.fillStyle=C(.12);for(var i=0;i<160;i+=2)x.fillRect(i*w/159,h-(8+Math.abs(Math.sin(i*.7+s.n*.02))*40),w/220,40)};
-S.net=function(x,w,h,t,s,C){
- if(!s.n){s.n=[];[3,5,5,3].forEach(function(c,l){for(var i=0;i<c;i++)s.n.push({l:l,x:w*(.1+.8*l/3)+(R()-.5)*30,y:h*(.15+.7*(i+.5)/c)})});
-  s.e=[];s.n.forEach(function(a){s.n.forEach(function(b){if(b.l==a.l+1)s.e.push([a,b])})});s.k=[];for(var i=0;i<14;i++)s.k.push([s.e[(R()*s.e.length)|0],R()])}
- x.strokeStyle=C(.12);x.lineWidth=1;x.beginPath();s.e.forEach(function(e){x.moveTo(e[0].x,e[0].y);x.lineTo(e[1].x,e[1].y)});x.stroke();
- s.k.forEach(function(p){p[1]+=.008;if(p[1]>1){p[1]=0;p[0]=s.e[(R()*s.e.length)|0]}var a=p[0][0],b=p[0][1];x.fillStyle=C(.9);x.beginPath();x.arc(a.x+(b.x-a.x)*p[1],a.y+(b.y-a.y)*p[1],2.5,0,6.283);x.fill()});
- s.n.forEach(function(n){x.fillStyle=C(.25);x.strokeStyle=C(.8);x.beginPath();x.arc(n.x,n.y,7,0,6.283);x.fill();x.stroke()})};
-S.matrix=function(x,w,h,t,s,C){
- if(!s.c){s.c=[];for(var i=0;i<w/26;i++)s.c.push({y:R()*h,v:.4+R()*1.2})}
- x.font='13px ui-monospace,monospace';
- s.c.forEach(function(c,i){c.y=(c.y+c.v)%(h+200);for(var j=0;j<10;j++){x.fillStyle=C(Math.max(0,.5-j*.05));x.fillText(['0','1','.','-','7','3'][(R()*6)|0],i*26,c.y-j*15)}})};
-S.radar=function(x,w,h,t,s,C){
- var cx=w/2,cy=h*.6,M=Math.hypot(w,h)*.6,a=t*.0012,k;
- for(k=0;k<5;k++){var r=(t*.06+k*M/5)%M;x.strokeStyle=C(.5*(1-r/M));x.lineWidth=1.5;x.beginPath();x.arc(cx,cy,r,0,6.283);x.stroke()}
- x.strokeStyle=C(.5);x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+M*Math.cos(a),cy+M*Math.sin(a));x.stroke();
- if(!s.b){s.b=[];for(k=0;k<8;k++)s.b.push([R()*6.283,M*(.15+R()*.8)])}
- s.b.forEach(function(b){var d=(a-b[0])%6.283;if(d<0)d+=6.283;x.fillStyle=C(.9*Math.max(.1,1-d/3));x.beginPath();x.arc(cx+b[1]*Math.cos(b[0]),cy+b[1]*Math.sin(b[0]),4,0,6.283);x.fill()})};
-var cv=[].slice.call(document.querySelectorAll('canvas.bg')).map(function(c){var sec=c.parentNode;return{c:c,x:c.getContext('2d'),sec:sec,fn:S[sec.dataset.scene],col:sec.style.getPropertyValue('--ac').trim(),vis:false,st:{}}});
-cv.forEach(function(o){o.C=function(a){return 'rgba('+o.col+','+a+')'}});
-function fit(){cv.forEach(function(o){var d=Math.min(devicePixelRatio||1,1.5),w=o.sec.clientWidth,h=o.sec.clientHeight;o.w=w;o.h=h;o.c.width=w*d;o.c.height=h*d;o.x.setTransform(d,0,0,d,0,0);o.st={}})}
-function draw(t){cv.forEach(function(o){if(o.vis||reduce){o.x.clearRect(0,0,o.w,o.h);o.fn(o.x,o.w,o.h,t,o.st,o.C)}})}
-fit();
-if('IntersectionObserver' in window){var io2=new IntersectionObserver(function(es){es.forEach(function(e){cv.forEach(function(o){if(o.sec===e.target)o.vis=e.isIntersecting})})},{rootMargin:'100px'});cv.forEach(function(o){io2.observe(o.sec)})}else cv.forEach(function(o){o.vis=true});
-if(reduce)draw(3000);else(function loop(t){draw(t);requestAnimationFrame(loop)})(0);
-var rt;if(window.ResizeObserver){var ro=new ResizeObserver(function(){clearTimeout(rt);rt=setTimeout(function(){fit();if(reduce)draw(3000)},200)});cv.forEach(function(o){ro.observe(o.sec)})}
-/* HUD counter */
-var hud=document.getElementById('hud'),f=231;
-function setHud(){hud.textContent='FRAME '+String(f).padStart(6,'0')+' // TRACKS 06 // SWEEP ACTIVE'}
-setHud();if(!reduce)setInterval(function(){f++;setHud()},100);
-/* typed role */
-var roles=['LiDAR moving object segmentation','class-agnostic motion prediction','3D point-cloud perception','MOS-filtered SLAM'],ri=0,ci=0,del=false,el=document.getElementById('typed');
-function type(){var s=roles[ri];if(reduce){el.textContent=s;return}
- el.textContent=s.slice(0,ci);
- if(!del&&ci<s.length){ci++;setTimeout(type,55)}
- else if(!del){del=true;setTimeout(type,1600)}
- else if(ci>0){ci--;setTimeout(type,25)}
- else{del=false;ri=(ri+1)%roles.length;setTimeout(type,300)}}
-type();
-/* fade in */
-if('IntersectionObserver' in window&&!reduce){
- document.documentElement.classList.add('js');
- var io=new IntersectionObserver(function(e){e.forEach(function(v){if(v.isIntersecting){v.target.classList.add('in');io.unobserve(v.target)}})},{threshold:.12});
- document.querySelectorAll('section:not(.hero) .card,section:not(.hero) h2,.tl .item').forEach(function(el){el.classList.add('fade');io.observe(el)});
-}
+  var d=document.documentElement;
+  if(!('IntersectionObserver' in window)) return;
+  d.classList.add('js');
+  var els=document.querySelectorAll('section:not(.hero) .card, section:not(.hero) h2, .tl .item');
+  var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.12});
+  els.forEach(function(el){el.classList.add('fade');io.observe(el);});
 })();
 </script>
 </body>
