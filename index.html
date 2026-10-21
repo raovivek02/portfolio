@@ -57,6 +57,18 @@ li{margin:5px 0}
 .status{font-size:12px;font-weight:600;color:var(--accent)}
 .skills div{margin-bottom:10px}
 .skills b{font-size:.9rem}
+.herorow{display:flex;gap:40px;align-items:center;justify-content:space-between;flex-wrap:wrap-reverse}
+.herotext{flex:1 1 420px}
+.me{width:240px;height:240px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);box-shadow:0 0 0 8px var(--surface);margin:0 auto}
+figure{margin:18px 0 0}
+figure img,figure video{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:#000}
+figcaption{color:var(--muted);font-size:13px;margin-top:8px}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:18px}
+.pair figure{margin:0}
+.pair img{background:#fff}
+.js .fade{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.js .fade.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.js .fade{opacity:1;transform:none;transition:none}}
 footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 </style>
 </head>
@@ -64,11 +76,12 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
 <nav><div><b>Vivek Yadav</b><span><a href="#about">About</a><a href="#education">Education</a><a href="#research">Research</a><a href="#projects">Projects</a><a href="#building">Building</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></span></div></nav>
 <main>
 
-<section class="hero">
+<section class="hero"><div class="herorow"><div class="herotext">
   <p class="tag">M.Tech · Cyber Physical Systems · IIT Jodhpur</p>
   <h1>Turning research papers into <em>working 3D perception</em> systems.</h1>
   <p class="lead">I work on deep learning, computer vision and LiDAR perception for autonomous driving, from motion prediction on point clouds to detection, segmentation and 3D reconstruction.</p>
   <div class="btns"><a class="btn p" href="#research">Thesis research</a><a class="btn" href="#projects">Projects</a><a class="btn" href="#contact">Contact</a></div>
+  </div><img class="me" src="photo.jpg" alt="Vivek Yadav" width="240" height="240"></div>
   <div class="stats">
     <div class="stat"><b>500 / 100</b><span>nuScenes train / val scenes reproduced</span></div>
     <div class="stat"><b>90.5%</b><span>mAP, PPE detection (YOLOv8)</span></div>
@@ -110,6 +123,7 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
       </ul>
     </details>
     <div class="chips"><span>LiDAR</span><span>nuScenes</span><span>MotionNet</span><span>LEGO-Motion</span><span>MF-MOS</span><span>HiMo</span><span>PyTorch</span><span>SLURM</span></div>
+    <figure><video src="lidar-motion.mp4" poster="lidar-motion-poster.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption>MotionNet baseline reproduction on nuScenes: LiDAR input with boxes (left), ground truth (middle) and model prediction (right).</figcaption></figure>
   </div>
 
   <div class="card big">
@@ -120,6 +134,7 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
       <li>Translated concepts from contemporary computer vision papers into working PyTorch code.</li>
       <li>Collaborated in a 4-person research team on dataset processing and rendering.</li>
     </ul>
+    <div class="pair"><figure><img src="recon-pred.jpg" alt="Predicted point cloud of a chair" loading="lazy"><figcaption>Predicted point cloud</figcaption></figure><figure><img src="recon-gt.jpg" alt="Ground-truth point cloud of a chair" loading="lazy"><figcaption>Ground truth</figcaption></figure></div>
   </div>
 </section>
 
@@ -134,6 +149,8 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
       <div><h4>Approach</h4><p>A YOLOv8 detection pipeline on a targeted, curated Kaggle dataset, with the Moondream2 vision-language model analysing detections to write contextual safety compliance reports.</p></div>
       <div><h4>Result</h4><p>90.5% mAP on validation. Containerized with Docker for reproducibility on local RTX GPU hardware.</p></div>
     </div>
+    <figure><img src="cognitiveguard.jpg" alt="CognitiveGuard running: detection window and event log" loading="lazy"><figcaption>A live run: the detection window (top left) and the event log, with a Tier 1 detector confidence and a Tier 2 vision-language analysis for each event.</figcaption></figure>
+    <div class="btns"><a class="btn p" href="https://drive.google.com/file/d/1u1CVrliN5On03bhudjlIaZZcFBjlT-Mm/view?usp=drive_link" target="_blank" rel="noopener">Watch the full demo</a></div>
   </div>
 
   <div class="card big">
@@ -144,6 +161,7 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
       <div><h4>Approach</h4><p>End-to-end 3D U-Net with residual skip connections to preserve fine spatial detail, trained with a combined Soft Dice + Cross-Entropy loss for severe foreground–background imbalance.</p></div>
       <div><h4>Robustness &amp; output</h4><p>Noise-injection tests, ITK-SNAP-compatible masks with preserved affine metadata, training on a Linux HPC cluster via SLURM.</p></div>
     </div>
+    <figure><video src="cardiac-3d.mp4" poster="cardiac-3d-poster.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption>3D rendering of the segmentation output, rotating through different views.</figcaption></figure>
   </div>
 
   <div class="grid">
@@ -183,9 +201,19 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
 <section id="contact">
   <h2>Contact</h2>
   <p class="lead">Open to research discussions, collaborations and opportunities in 3D vision and autonomous driving perception.</p>
-  <div class="btns"><a class="btn p" href="mailto:vivekyadav02072002@gmail.com">Email</a><a class="btn" href="https://github.com/raovivek02">GitHub</a><a class="btn" href="#">LinkedIn</a></div>
+  <div class="btns"><a class="btn p" href="mailto:vivekyadav02072002@gmail.com">Email</a><a class="btn" href="https://github.com/raovivek02" target="_blank" rel="noopener">GitHub</a><a class="btn" href="https://www.linkedin.com/in/vivek-yadav-719885371/" target="_blank" rel="noopener">LinkedIn</a></div>
 </section>
 </main>
 <footer>© 2026 Vivek Yadav · IIT Jodhpur</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!('IntersectionObserver' in window)) return;
+  d.classList.add('js');
+  var els=document.querySelectorAll('section:not(.hero) .card, section:not(.hero) h2, .tl .item');
+  var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.12});
+  els.forEach(function(el){el.classList.add('fade');io.observe(el);});
+})();
+</script>
 </body>
 </html>
