@@ -6,79 +6,95 @@
 <title>Vivek Yadav | 3D Vision &amp; LiDAR Perception</title>
 <meta name="theme-color" content="#0f172a">
 <style>
-:root{--bg:#f8fafc;--surface:#fff;--text:#0f172a;--muted:#475569;--line:#e2e8f0;--accent:#0284c7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f172a;--surface:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--line:#334155;--accent:#38bdf8;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f172a;--surface:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--line:#334155;--accent:#38bdf8;color-scheme:dark}
+:root{--bg:#05080f;--surface:rgba(9,15,28,.78);--text:#e6f1ff;--muted:#8ba3bd;--line:rgba(34,211,238,.18);--accent:#22d3ee;--accent2:#4ade80;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:70px}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:70px;background:var(--bg)}
+body{margin:0;background:transparent;color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;counter-reset:s}
 a{color:var(--accent);text-decoration:none}
-nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+#lidar{position:fixed;inset:0;z-index:-1;width:100%;height:100%}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
+.scan::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.55))}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:rgba(5,8,15,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:40}
 nav div{max-width:980px;margin:auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:8px 18px;flex-wrap:wrap}
+nav b{font-family:ui-monospace,Menlo,monospace;letter-spacing:.08em;color:var(--accent)}
+nav b::before{content:"\25C9 ";color:var(--accent2)}
 nav span{display:flex;gap:16px;flex-wrap:wrap}
-nav span a{color:var(--muted);font-size:14px}
-nav span a:hover{color:var(--accent)}
+nav span a{color:var(--muted);font:13px ui-monospace,Menlo,monospace}
+nav span a:hover{color:var(--accent);text-shadow:0 0 10px var(--accent)}
 main{max-width:980px;margin:auto;padding:0 20px}
-section{padding:60px 0 4px}
-h1{font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.1;margin:0 0 12px}
-h1 em{font-style:normal;color:var(--accent)}
-h2{font-size:1.5rem;margin:0 0 22px}
-h2::before{content:"";display:inline-block;width:28px;height:3px;background:var(--accent);margin-right:12px;vertical-align:middle}
-.hero{padding-top:80px}
-.tag{color:var(--accent);font-family:ui-monospace,Menlo,monospace;font-size:14px;margin:0 0 6px}
-.lead{color:var(--muted);max-width:700px;font-size:1.05rem}
+section{padding:64px 0 4px}
+h1{font-size:clamp(2.1rem,5.6vw,3.5rem);line-height:1.1;margin:0 0 14px;letter-spacing:-.02em}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:1.45rem;margin:0 0 24px;font-family:ui-monospace,Menlo,monospace;letter-spacing:.02em}
+h2::before{counter-increment:s;content:counter(s,decimal-leading-zero) " //";color:var(--accent);margin-right:12px;font-size:.9rem}
+.hero{padding-top:70px}
+.hud,.tag{font:12px ui-monospace,Menlo,monospace;color:var(--accent2);letter-spacing:.08em;margin:0 0 8px;text-transform:uppercase}
+.role{font:600 1.05rem ui-monospace,Menlo,monospace;color:var(--accent);min-height:1.7em;margin:0 0 6px}
+.cur{display:inline-block;width:9px;height:1.05em;background:var(--accent);margin-left:3px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.lead{color:var(--muted);max-width:700px;font-size:1.04rem}
 .btns{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
-.btn{padding:10px 20px;border-radius:8px;border:1px solid var(--accent);font-weight:600}
-.btn.p{background:var(--accent);color:var(--bg)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:34px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.stat b{display:block;font-size:1.5rem;color:var(--accent)}
+.btn{padding:10px 20px;border-radius:6px;border:1px solid var(--accent);font:600 14px ui-monospace,Menlo,monospace;transition:box-shadow .2s,transform .2s}
+.btn:hover{box-shadow:0 0 22px rgba(34,211,238,.5);transform:translateY(-2px)}
+.btn.p{background:var(--accent);color:#031018}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:36px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;backdrop-filter:blur(6px)}
+.stat b{display:block;font:700 1.5rem ui-monospace,Menlo,monospace;color:var(--accent);text-shadow:0 0 14px rgba(34,211,238,.5)}
 .stat span{color:var(--muted);font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .25s,box-shadow .25s}
+.card:hover{border-color:rgba(34,211,238,.55);box-shadow:0 0 28px rgba(34,211,238,.12)}
+.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--accent)}
+.card::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.card::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
 .card h3{margin:0 0 4px;font-size:1.08rem}
-.meta{color:var(--muted);font-size:13px;margin:0 0 10px}
+.meta{color:var(--muted);font:12px ui-monospace,Menlo,monospace;margin:0 0 10px}
 .card p{margin:8px 0;color:var(--muted);font-size:.95rem}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
-.chips span{font-size:12px;padding:2px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.chips span{font:11px ui-monospace,Menlo,monospace;padding:2px 10px;border-radius:3px;border:1px solid var(--line);color:var(--accent2);background:rgba(74,222,128,.06)}
 .big{margin-bottom:16px}
 .big .cs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
-.cs div{border-left:3px solid var(--accent);padding-left:12px}
-.cs h4{margin:0 0 2px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.cs div{border-left:2px solid var(--accent);padding-left:12px}
+.cs h4{margin:0 0 2px;font:11px ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
 .cs p{margin:0}
 details{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
-summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600}
+summary{cursor:pointer;color:var(--accent);font:600 13px ui-monospace,Menlo,monospace}
 ul{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:.95rem}
 li{margin:5px 0}
-.tl{border-left:2px solid var(--line);padding-left:20px;margin-left:6px}
+.tl{border-left:1px solid var(--accent);padding-left:22px;margin-left:6px}
 .tl .item{position:relative;margin-bottom:24px}
-.tl .item::before{content:"";position:absolute;left:-27px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.tl .item::before{content:"";position:absolute;left:-29px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 12px var(--accent)}
 .tl h3{margin:0;font-size:1.05rem}
-.status{font-size:12px;font-weight:600;color:var(--accent)}
+.status{font:700 11px ui-monospace,Menlo,monospace;color:var(--accent2);letter-spacing:.08em}
 .skills div{margin-bottom:10px}
-.skills b{font-size:.9rem}
+.skills b{font:600 .85rem ui-monospace,Menlo,monospace;color:var(--text)}
+footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font:12px ui-monospace,Menlo,monospace}
 .herorow{display:flex;gap:40px;align-items:center;justify-content:space-between;flex-wrap:wrap-reverse}
 .herotext{flex:1 1 420px}
-.me{width:240px;height:240px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);box-shadow:0 0 0 8px var(--surface);margin:0 auto}
-figure{margin:18px 0 0}
-figure img,figure video{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:#000}
+.me{width:240px;height:240px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);margin:0 auto;animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(34,211,238,.08),0 0 50px rgba(34,211,238,.45)}0%,100%{box-shadow:0 0 0 6px rgba(34,211,238,.1),0 0 24px rgba(34,211,238,.25)}}
+figure{position:relative;margin:18px 0 0}
+figure img,figure video{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--line);background:#000}
+figure:has(video)::before{content:"\25CF REC";position:absolute;top:10px;left:12px;z-index:2;font:700 11px ui-monospace,Menlo,monospace;color:#f87171;background:rgba(0,0,0,.65);padding:2px 8px;border-radius:3px}
 figcaption{color:var(--muted);font-size:13px;margin-top:8px}
 .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:18px}
 .pair figure{margin:0}
 .pair img{background:#fff}
 .js .fade{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .js .fade.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.js .fade{opacity:1;transform:none;transition:none}}
-footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.js .fade{opacity:1;transform:none;transition:none}.me,.cur{animation:none}}
 </style>
 </head>
 <body>
+<canvas id="lidar" aria-hidden="true"></canvas><div class="scan" aria-hidden="true"></div>
 <nav><div><b>Vivek Yadav</b><span><a href="#about">About</a><a href="#education">Education</a><a href="#research">Research</a><a href="#projects">Projects</a><a href="#building">Building</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a></span></div></nav>
 <main>
 
 <section class="hero"><div class="herorow"><div class="herotext">
+  <p class="hud" id="hud">FRAME 000231</p>
   <p class="tag">M.Tech · Cyber Physical Systems · IIT Jodhpur</p>
   <h1>Turning research papers into <em>working 3D perception</em> systems.</h1>
+  <p class="role"><span id="typed"></span><i class="cur"></i></p>
   <p class="lead">I work on deep learning, computer vision and LiDAR perception for autonomous driving, from motion prediction on point clouds to detection, segmentation and 3D reconstruction.</p>
   <div class="btns"><a class="btn p" href="#research">Thesis research</a><a class="btn" href="#projects">Projects</a><a class="btn" href="#contact">Contact</a></div>
   </div><img class="me" src="photo.jpg" alt="Vivek Yadav" width="240" height="240"></div>
@@ -204,15 +220,69 @@ footer{max-width:980px;margin:60px auto 0;padding:24px 20px;border-top:1px solid
   <div class="btns"><a class="btn p" href="mailto:vivekyadav02072002@gmail.com">Email</a><a class="btn" href="https://github.com/raovivek02" target="_blank" rel="noopener">GitHub</a><a class="btn" href="https://www.linkedin.com/in/vivek-yadav-719885371/" target="_blank" rel="noopener">LinkedIn</a></div>
 </section>
 </main>
-<footer>© 2026 Vivek Yadav · IIT Jodhpur</footer>
+<footer>© 2026 Vivek Yadav · IIT Jodhpur // end of sequence</footer>
 <script>
 (function(){
-  var d=document.documentElement;
-  if(!('IntersectionObserver' in window)) return;
-  d.classList.add('js');
-  var els=document.querySelectorAll('section:not(.hero) .card, section:not(.hero) h2, .tl .item');
-  var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.12});
-  els.forEach(function(el){el.classList.add('fade');io.observe(el);});
+var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var c=document.getElementById('lidar'),x=c.getContext('2d'),base=document.createElement('canvas'),bx=base.getContext('2d');
+var W,H,cx,cy,R,P=[],O=[],ang=0,last=0;
+var COL={car:'74,222,128',ped:'251,191,36',bus:'232,121,249',bike:'34,211,238'};
+var DEF=[['car',.94,-.9,.3,34,18,.2,-.35],['bus',.91,.5,.37,56,22,-.15,.18],['ped',.88,-2.2,.18,10,10,.12,.1],['car',.9,2.4,.28,34,18,-.2,.2],['bike',.83,1.5,.16,18,10,.1,-.25],['ped',.86,-0.2,.15,10,10,-.1,-.12]];
+function init(){
+ var d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+ c.width=base.width=W*d;c.height=base.height=H*d;
+ x.setTransform(d,0,0,d,0,0);bx.setTransform(d,0,0,d,0,0);
+ cx=W>800?W*.68:W*.5;cy=H*.45;R=Math.hypot(Math.max(cx,W-cx),Math.max(cy,H-cy));
+ var step=W>800?26:20,k=W>800?.4:.25;P=[];
+ for(var r=step;r<R;r+=step){var n=Math.floor(r*k);for(var i=0;i<n;i++){var a=Math.random()*6.2832,rr=r+(Math.random()-.5)*3;P.push([a,cx+rr*Math.cos(a),cy+rr*Math.sin(a)])}}
+ bx.clearRect(0,0,W,H);bx.fillStyle='rgba(34,211,238,.24)';
+ P.forEach(function(p){bx.fillRect(p[1],p[2],1.4,1.4)});
+ var m=Math.min(W,H);
+ O=DEF.map(function(o){var rad=o[3]*m*1.1+60,a=o[2];return{c:o[0],s:o[1],px:cx+rad*Math.cos(a),py:cy+rad*Math.sin(a),w:o[4],h:o[5],vx:o[6],vy:o[7],hd:Math.random()*3,dots:Array.from({length:10},function(){return[(Math.random()-.5)*o[4],(Math.random()-.5)*o[5]]})}});
+}
+function rec(a){var d=(ang-a)%6.2832;if(d<0)d+=6.2832;return d<1.7?1-d/1.7:0}
+function frame(t){
+ var dt=Math.min(t-last,50);last=t;if(!reduce)ang=(ang+dt*.0009)%6.2832;
+ x.clearRect(0,0,W,H);x.drawImage(base,0,0,W,H);
+ x.fillStyle='#22d3ee';
+ for(var i=0;i<P.length;i++){var b=rec(P[i][0]);if(b>.02){x.globalAlpha=.1+.85*b;x.fillRect(P[i][1],P[i][2],1.8,1.8)}}
+ x.globalAlpha=1;
+ if(x.createConicGradient){var g=x.createConicGradient(ang-1.7,cx,cy);g.addColorStop(0,'rgba(34,211,238,0)');g.addColorStop(.27,'rgba(34,211,238,.13)');g.addColorStop(.2705,'rgba(34,211,238,0)');x.fillStyle=g;x.fillRect(0,0,W,H)}
+ x.strokeStyle='rgba(34,211,238,.6)';x.lineWidth=1.2;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+R*Math.cos(ang),cy+R*Math.sin(ang));x.stroke();
+ x.font='10px ui-monospace,Menlo,monospace';
+ O.forEach(function(o){
+  if(!reduce){o.px+=o.vx*dt*.03;o.py+=o.vy*dt*.03;var dx=o.px-cx,dy=o.py-cy;if(Math.hypot(dx,dy)>R*.8||Math.hypot(dx,dy)<50){o.vx*=-1;o.vy*=-1}}
+  var a=Math.atan2(o.py-cy,o.px-cx);if(a<0)a+=6.2832;var al=.45+.55*rec(a),col=COL[o.c];
+  x.save();x.translate(o.px,o.py);x.rotate(Math.atan2(o.vy,o.vx));
+  x.strokeStyle='rgba('+col+','+al+')';x.lineWidth=1.5;x.strokeRect(-o.w/2,-o.h/2,o.w,o.h);
+  x.fillStyle='rgba('+col+','+al+')';o.dots.forEach(function(d){x.fillRect(d[0],d[1],2,2)});
+  x.beginPath();x.moveTo(0,0);x.lineTo(o.w*.9,0);x.stroke();
+  x.restore();
+  x.fillStyle='rgba('+col+','+al+')';x.fillText(o.c+' '+o.s.toFixed(2),o.px-o.w/2,o.py-o.h/2-14);
+ });
+ if(!reduce)requestAnimationFrame(frame);
+}
+init();requestAnimationFrame(frame);
+var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){init();if(reduce)requestAnimationFrame(frame)},200)});
+/* HUD counter */
+var hud=document.getElementById('hud'),f=231;
+function setHud(){hud.textContent='FRAME '+String(f).padStart(6,'0')+' // TRACKS 06 // SWEEP ACTIVE'}
+setHud();if(!reduce)setInterval(function(){f++;setHud()},100);
+/* typed role */
+var roles=['LiDAR moving object segmentation','class-agnostic motion prediction','3D point-cloud perception','MOS-filtered SLAM'],ri=0,ci=0,del=false,el=document.getElementById('typed');
+function type(){var s=roles[ri];if(reduce){el.textContent=s;return}
+ el.textContent=s.slice(0,ci);
+ if(!del&&ci<s.length){ci++;setTimeout(type,55)}
+ else if(!del){del=true;setTimeout(type,1600)}
+ else if(ci>0){ci--;setTimeout(type,25)}
+ else{del=false;ri=(ri+1)%roles.length;setTimeout(type,300)}}
+type();
+/* fade in */
+if('IntersectionObserver' in window&&!reduce){
+ document.documentElement.classList.add('js');
+ var io=new IntersectionObserver(function(e){e.forEach(function(v){if(v.isIntersecting){v.target.classList.add('in');io.unobserve(v.target)}})},{threshold:.12});
+ document.querySelectorAll('section:not(.hero) .card,section:not(.hero) h2,.tl .item').forEach(function(el){el.classList.add('fade');io.observe(el)});
+}
 })();
 </script>
 </body>
